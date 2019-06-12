@@ -22,15 +22,21 @@ struct ContentView : View {
     var body: some View {
         NavigationView {
             List {
-                ScrollView {
+                VStack(alignment: .leading) {
                     Text("Trending users..")
-                    HStack {
-                        ForEach(users.identified(by: \.id)) { user in
-                            TrendingUser(user: user)
-                            TrendingUser(user: user)
+                    ScrollView {
+                        VStack {
+                            HStack {
+                                ForEach(users.identified(by: \.id)) { user in
+                                    NavigationButton(destination: DetailView()) {
+                                        TrendingUser(user: user)
+                                    }
+                                }
+                            }
                         }
-                    }
-                }.frame(height: 150)
+                    }.frame(height:150)
+                }
+                
                 
                 Text("Users Posts...").font(.largeTitle)
                 ForEach(users.identified(by: \.id)) { user in
@@ -43,7 +49,7 @@ struct ContentView : View {
     }
 }
 
-struct DetailedView: View {
+struct DetailView: View {
     var body: some View {
         Text("Detail View")
     }
@@ -70,8 +76,8 @@ struct UserPost: View {
                 .padding(.leading, 16)
                 .padding(.trailing, 100)
             Image(user.postImageName)
+                .resizable()
                 .frame(height: 350)
-                .clipped()
         }.padding(.leading, -20)
             .padding(.trailing, -20)
             .padding(.bottom, 0)
@@ -84,13 +90,14 @@ struct TrendingUser: View {
     var body: some View {
         VStack (alignment: .leading) {
             Image(user.imageName)
+                .renderingMode(.original)
                 .resizable()
-                .frame(width: 50, height: 50)
-                .clipped()
+                .frame(width: 70, height: 70)
+                .cornerRadius(8)
             Text(user.username).font(.subheadline)
             Text(user.company).font(.caption)
 
-            }.padding()
+            }
     }
 }
 
