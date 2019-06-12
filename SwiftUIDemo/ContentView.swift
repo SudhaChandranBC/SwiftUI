@@ -21,6 +21,7 @@ struct ContentView : View {
     
     var body: some View {
         NavigationView {
+            
             List {
                 VStack(alignment: .leading) {
                     Text("Trending users..")
@@ -37,6 +38,9 @@ struct ContentView : View {
                     }.frame(height:150)
                 }
                 
+                NavigationButton(destination: FormView()) {
+                    Text("Form! Click Me!")
+                }
                 
                 Text("Users Posts...").font(.largeTitle)
                 ForEach(users.identified(by: \.id)) { user in
@@ -45,6 +49,59 @@ struct ContentView : View {
                     
                 }
             }.navigationBarTitle(Text("Dynamic User List"))
+        }
+    }
+}
+
+struct FormView: View {
+    
+    @State var firstName = ""
+    @State var lastName = ""
+    @State var users = [""]
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                VStack {
+                    VStack {
+                        Group {
+                            TextField($firstName, placeholder: Text("First Name")).padding(12)
+                            }.background(Color.white).clipShape(RoundedRectangle(cornerRadius: 5))
+                            .shadow(radius: 5)
+                        Group {
+                            TextField($lastName, placeholder: Text("Last Name")).padding(12)
+                            }.background(Color.white).clipShape(RoundedRectangle(cornerRadius: 5))
+                            .shadow(radius: 5)
+                        HStack {
+                            Button(action: {
+                                self.users.append("\(self.firstName) \(self.lastName)")
+                                self.firstName = ""
+                                self.lastName = ""
+                            }) {
+                                Text("Add to List").color(.white)
+                                }
+                                .padding(15)
+                                .background(Color.green)
+                                .clipShape(RoundedRectangle(cornerRadius: 4))
+                            
+                            Button(action: {
+                                self.users.removeAll()
+                            }) {
+                                Text("Delete from List").color(.white)
+                                }
+                                .padding(15)
+                                .background(Color.red)
+                                .clipShape(RoundedRectangle(cornerRadius: 4))
+                            }.padding(15)
+                        
+                    }.padding(12)
+                    }.background(Color.gray)
+                
+                List(users .identified(by: \.self)) {
+                    Text($0)
+                }
+
+            }.navigationBarTitle(Text("States in SwiftUI"))
         }
     }
 }
@@ -125,3 +182,4 @@ struct ContentView_Previews : PreviewProvider {
     }
 }
 #endif
+
